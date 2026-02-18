@@ -1,8 +1,10 @@
+import { Geopoint, SanityImageDimensions } from "@/sanity.types";
+
 // Amenity type
 export interface Amenity {
   _id: string;
-  value: string;
-  label: string;
+  value: string | null;
+  label: string | null;
   icon?: string | null;
   order?: number;
 }
@@ -23,39 +25,34 @@ export interface GeoPoint {
 export interface SanityImage {
   asset: {
     _id: string;
-    url: string;
-    metadata?: {
-      lqip?: string;
-      dimensions?: {
-        width: number;
-        height: number;
-      };
-    };
-  };
-  alt?: string;
+    url: string | null;
+    metadata: {
+      lqip: string | null;
+      dimensions: SanityImageDimensions | null;
+    } | null;
+  } | null;
+  alt: string | null;
 }
 
 export interface Property {
   _id: string;
   title: string;
   slug: string;
-  description?: string;
   price: number;
-  propertyType: "house" | "apartment" | "condo" | "townhouse" | "land";
-  status: "active" | "pending" | "sold";
+  originalPrice: number;
   bedrooms: number;
   bathrooms: number;
+  propertyType: string;
+  status: string;
   squareFeet: number;
-  yearBuilt?: number;
+  yearBuilt: number;
+  lotSize: number;
   address: Address;
-  location?: GeoPoint;
-  images?: SanityImage[];
-  image?: SanityImage;
-  amenities?: string[];
-  featured?: boolean;
+  image: SanityImage;
+  location: Geopoint;
+  amenities: Array<string>;
+  openHouseDate: string;
   createdAt: string;
-  updatedAt?: string;
-  agent?: Agent;
 }
 
 export interface Agent {

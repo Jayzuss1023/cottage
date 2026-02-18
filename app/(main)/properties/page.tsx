@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 // import { DynamicMapView } from "@/components/map/DynamicMapView";
 import { FilterSidebar } from "@/components/property/FilterSidebar";
-import * as PropertyGrid from "@/components/property/PropertyGrid";
+import { PropertyGrid } from "@/components/property/PropertyGrid";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ import {
   PROPERTIES_COUNT_QUERY,
   PROPERTIES_SEARCH_QUERY,
 } from "@/sanity/lib/queries/queries";
+import { Property } from "@/types";
 
 export const metadata: Metadata = {
   title: "Browse Properties",
@@ -73,12 +74,12 @@ export default async function PropertiesPage({
 
   const queryParams = {
     minPrice: Number(params.minPrice) || 0,
-    maxPrice: Number(params.minPrice) || 0,
+    maxPrice: Number(params.minPrice) || 100000000,
     beds: bedsNum,
     bedsIsPlus,
     baths: bathsNum,
     bathsIsPlus,
-    type: params.type === "all" ? "" : params.type || 0,
+    type: params.type === "all" ? "" : params.type || "",
     city: params.city?.toLowerCase() || "",
     // Advanced filters
     minSqft: Number(params.minSqft) || 0,
@@ -131,25 +132,31 @@ export default async function PropertiesPage({
     params.amenities;
 
   return (
-    <div>
+    <div className="min-h-screen bg-accent/20">
       {/* Header */}
-      <div>
-        <div>
-          <nav>
-            <Link href="/">Home</Link>
+      <div className="bg-background border-b border-border/50">
+        <div className="container py-8">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+            <Link href="/" className="hover:text-goreground transition-colors">
+              Home
+            </Link>
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
-            <span>Properties</span>
+            <span className="text-foreground font-medium">Properties</span>
           </nav>
-          <h1>Browse Properties</h1>
-          <p>Find your perfect cottage from our curated selection</p>
+          <h1 className="text-3xl md:text-4xl font-bold font-heading">
+            Browse Properties
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Find your perfect cottage from our curated selection
+          </p>
         </div>
       </div>
 
-      <div>
-        <div>
+      <div className="container py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <aside>
-            <div>
+          <aside className="lg:w-80 shrink-0">
+            <div className="lg:sticky lg:top-24">
               <Suspense
                 fallback={<Skeleton className="h-125 w-full rounded-2xl" />}
               >
@@ -159,7 +166,142 @@ export default async function PropertiesPage({
           </aside>
 
           {/* Main Content */}
-          <div>{/* Results Header */}</div>
+          <div className="flex-1 min-w-0">
+            {/* Results Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <p className="text-lg font-medium">
+                  <span className="tabular-nums">{totalCount || 0}</span>{" "}
+                  {totalCount === 1 ? "property" : "properties"}
+                </p>
+                {hasFilters && (
+                  <p className="text-sm text-muted-foreground">
+                    Showing filtered results
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <Tabs defaultValue="list" className="w-full">
+              <TabsList className="mb-6 bg-background border border-border/50 p-1 rounded-xl">
+                <TabsTrigger
+                  value="list"
+                  className="flex items-center gap-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <LayoutGrid className="h-4 w-4" aria-hidden="true" />
+                  Grid View
+                </TabsTrigger>
+                <TabsTrigger
+                  value="map"
+                  className="flex items-center gap-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <MapIcon className="h-4 w-4" aria-hidden="true" />
+                  Map View
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="list" className="mt-0">
+                {properties && properties.length > 0 ? (
+                  <>
+                    <PropertyGrid
+                      properties={(properties || []) as Property[]}
+                    />
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <nav
+                        className="flex items-center justify-center gap-2 mt-10"
+                        aria-hidden="true"
+                      >
+                        {page > 1 ? (
+                          <Button variant="outline" size="sm" asChild>
+                            <Link
+                              href={`/properties?${new URLSearchParams({
+                                ...params,
+                                page: String(page - 1),
+                              }).toString()}`}
+                            >
+                              <ChevronLeft
+                                className="h-4 w-5"
+                                aria-hidden="true"
+                              />
+                              Previous
+                            </Link>
+                          </Button>
+                        ) : (
+                          <Button variant="outline" size="sm" disabled>
+                            <ChevronLeft
+                              className="h-4 w-4 mr-1"
+                              aria-hidden="true"
+                            >
+                              Previous
+                            </ChevronLeft>
+                          </Button>
+                        )}
+
+                        <span className="flex items-center px-4 text-sm text-muted-foreground tabular-nums">
+                          Page{" "}
+                          <span className="font-medium text-muted-foreground mx-1">
+                            {page}
+                          </span>{" "}
+                          of{" "}
+                          <span className="font-medium text-muted-foreground ml-1">
+                            {totalPages}
+                          </span>
+                        </span>
+                        {page < totalPages ? (
+                          <Button variant="outline" size="sm" asChild>
+                            <Link
+                              href={`/properties?${new URLSearchParams({
+                                ...params,
+                                page: String(page + 1),
+                              }).toString()}`}
+                            >
+                              Next
+                              <ChevronRight
+                                className="h-4 w-4 ml-1"
+                                aria-hidden="true"
+                              />
+                            </Link>
+                          </Button>
+                        ) : (
+                          <Button variant="outline" size="sm" disabled>
+                            Next
+                            <ChevronRight
+                              className="h-4 w-4 ml-1"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        )}
+                      </nav>
+                    )}
+                  </>
+                ) : (
+                  /* Empty State */
+                  <div className="text-center py-16 bg-background rounded-2xl border border-border/50">
+                    <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <Home
+                        className="h-8 w-8 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold font-heading mb-2">
+                      No Properties Found
+                    </h3>
+                    <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                      {hasFilters
+                        ? "try adjusting your filters to see more results."
+                        : "There are no properties available at the moment."}
+                    </p>
+                    {hasFilters && (
+                      <Button variant="outline" asChild>
+                        <Link href="/properties">Clear All Filters</Link>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>

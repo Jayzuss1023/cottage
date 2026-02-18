@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNonNullAssertion: biome-ignore lint: false positive */
 "use client";
 
 import { ChevronDown, Filter, RotateCcw, Search } from "lucide-react";
@@ -197,15 +198,19 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
   ].filter(Boolean).length;
 
   return (
-    <div>
+    <div className="bg-background rounded-2xl border border-border/50 shadow-warm p-6">
       {/* Header */}
-      <div>
-        <div>
-          <Filter className="h-5 w-5 items-center justify-center mb-6" />
-          <h3>Filters</h3>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Filter className="h-5 w-5 text-primary" aria-hidden="true" />
+          <h3 className="font-semibold font-heading text-lg">Filters</h3>
         </div>
         {hasActiveFilters && (
-          <button onClick={clearFilters} type="button">
+          <button
+            onClick={clearFilters}
+            type="button"
+            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Reset
           </button>
@@ -214,7 +219,7 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
 
       <div className="space-y-6">
         {/* Location */}
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="city" className="text-sm font-medium">
             Location
           </Label>
@@ -534,9 +539,9 @@ export function FilterSidebar({ amenities }: FilterSidebarProps) {
                     >
                       <Checkbox
                         id={`amenity-${amenity.value}`}
-                        checked={filters.amenities.includes(amenity.value)}
+                        checked={filters.amenities.includes(amenity.value!)}
                         onCheckedChange={() =>
-                          handleAmenityToggle(amenity.value)
+                          handleAmenityToggle(amenity.value!)
                         }
                       />
                       <Label

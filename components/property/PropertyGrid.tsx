@@ -29,7 +29,7 @@ export function PropertyGrid({
       {properties.map((property) => (
         <PropertyCard
           key={property._id}
-          property={property}
+          property={(property || {}) as Property}
           onSave={onSave}
           isSaved={saveIds?.includes(property._id)}
           showRemoveButton={showRemoveButton}
