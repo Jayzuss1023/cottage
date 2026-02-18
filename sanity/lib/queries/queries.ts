@@ -19,6 +19,7 @@ export const FEATURED_PROPERTIES_QUERY = defineQuery(/* groq */ `
     price,
     bedrooms,
     bathrooms,
+
     squareFeet,
     address,
     "image": images[0] { ${imageFragment} },
