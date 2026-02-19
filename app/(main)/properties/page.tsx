@@ -8,7 +8,7 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-// import { DynamicMapView } from "@/components/map/DynamicMapView";
+import { DynamicMapView } from "@/components/map/DynamicMapView";
 import { FilterSidebar } from "@/components/property/FilterSidebar";
 import { PropertyGrid } from "@/components/property/PropertyGrid";
 import { Button } from "@/components/ui/button";
@@ -299,6 +299,14 @@ export default async function PropertiesPage({
                     )}
                   </div>
                 )}
+              </TabsContent>
+
+              <TabsContent value="map" className="mt-0">
+                <div className="h-150 rounded-2xl overflow-hidden border border-border/50 shardow-warm">
+                  <DynamicMapView
+                    properties={(properties || []) as Property[]}
+                  />
+                </div>
               </TabsContent>
             </Tabs>
           </div>

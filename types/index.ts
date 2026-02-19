@@ -1,4 +1,4 @@
-import { Geopoint, SanityImageDimensions } from "@/sanity.types";
+import { SanityImageDimensions } from "@/sanity.types";
 
 // Amenity type
 export interface Amenity {
@@ -37,19 +37,20 @@ export interface SanityImage {
 export interface Property {
   _id: string;
   title: string;
+  description?: string;
   slug: string;
   price: number;
   originalPrice: number;
   bedrooms: number;
   bathrooms: number;
-  propertyType: string;
-  status: string;
+  propertyType?: string;
+  status?: string;
   squareFeet: number;
   yearBuilt: number;
   lotSize: number;
   address: Address;
   image: SanityImage;
-  location: Geopoint;
+  location: GeoPoint;
   amenities: Array<string>;
   openHouseDate: string;
   createdAt: string;
