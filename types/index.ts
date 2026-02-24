@@ -25,13 +25,16 @@ export interface GeoPoint {
 export interface SanityImage {
   asset: {
     _id: string;
-    url: string | null;
-    metadata: {
-      lqip: string | null;
-      dimensions: SanityImageDimensions | null;
-    } | null;
-  } | null;
-  alt: string | null;
+    url: string;
+    metadata?: {
+      lqip?: string;
+      dimensions?: {
+        width: number;
+        height: number;
+      };
+    };
+  };
+  alt?: string;
 }
 
 export interface Property {
@@ -50,10 +53,12 @@ export interface Property {
   lotSize: number;
   address: Address;
   image: SanityImage;
+  images: SanityImage[];
   location: GeoPoint;
   amenities: Array<string>;
   openHouseDate: string;
   createdAt: string;
+  agent: Agent;
 }
 
 export interface Agent {
