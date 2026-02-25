@@ -67,7 +67,7 @@ export interface Agent {
   name: string;
   email: string;
   phone?: string;
-  photo?: string;
+  photo?: SanityImage;
   bio?: string;
   licenseNumber?: string;
   agency?: string;

@@ -12,8 +12,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DynamicMapView } from "@/components/map/DynamicMapView";
-// import { AgentCard } from "@/components/property/AgentCard";
-// import { ContactAgentButton } from "@/components/property/ContactAgentButton";
+import { AgentCard } from "@/components/property/AgentCard";
+import { ContactAgentButton } from "@/components/property/ContactAgentButton";
 import { ImageGallery } from "@/components/property/ImageGallery";
 import { SavePropertyButton } from "@/components/property/SavePropertyButton";
 import { SharePropertyButton } from "@/components/property/SharePropertyButton";
@@ -118,7 +118,7 @@ export default async function PropertyPage({
       <div className="container py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main */}
-          <div>
+          <div className="lg:col-span-2 space-y-8">
             {/* Gallery */}
             <ImageGallery
               images={property.images || []}
@@ -126,11 +126,13 @@ export default async function PropertyPage({
             />
 
             {/* Prop Header */}
-            <div>
-              <div>
+            <div className="bg-background rounded-2xl border border-border/50 p-6 shadow-warm">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                 <div>
-                  <div>
-                    <h1>{formatPrice(property.price)}</h1>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h1 className="text-3xl md:text-4xl font-bold font-heading tabular-nums">
+                      {formatPrice(property.price)}
+                    </h1>
                     {statusLabel && (
                       <Badge
                         variant={
@@ -141,9 +143,11 @@ export default async function PropertyPage({
                       </Badge>
                     )}
                   </div>
-                  <h2>{property.title}</h2>
+                  <h2 className="text-lg text-muted-foreground">
+                    {property.title}
+                  </h2>
                 </div>
-                <div>
+                <div className="flex gap-2">
                   {userId && <SavePropertyButton propertyId={property._id} />}
                   <SharePropertyButton
                     title={property.title}
@@ -153,7 +157,7 @@ export default async function PropertyPage({
               </div>
 
               {property.address && (
-                <div>
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <MapPin className="h-5 w-5 shrink-0" aria-hidden="true" />
                   <span>
                     {property.address.street}, {property.address.city},{" "}
@@ -205,33 +209,44 @@ export default async function PropertyPage({
 
             {/* Description */}
             {property.description && (
-              <Card>
+              <Card className="shadow-warm">
                 <CardHeader>
-                  <CardTitle>About This Property</CardTitle>
+                  <CardTitle className="font-heading">
+                    About This Property
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>{property.description}</p>
+                  <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    {property.description}
+                  </p>
                 </CardContent>
               </Card>
             )}
 
             {/* Amenities */}
             {property.amenities && property.amenities.length > 0 && (
-              <Card>
+              <Card className="shadow-warm">
                 <CardHeader>
-                  <CardTitle>Amenities & Features</CardTitle>
+                  <CardTitle className="font-heading">
+                    Amenities & Features
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {property.amenities.map((amenity: string) => (
-                      <div key={amenity}>
-                        <div>
+                      <div
+                        key={amenity}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-accent/50"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center shrink-0">
                           <Check
                             className="h-4 w-4 text-succes"
                             aria-hidden="true"
                           />
-                          <span>{amenity.replace(/-/g, " ")}</span>
                         </div>
+                        <span className="capitalize text-sm font-medium">
+                          {amenity.replace(/-/g, " ")}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -241,11 +256,11 @@ export default async function PropertyPage({
 
             {/* Map */}
             {property.location && (
-              <Card>
+              <Card className="shadow-warm overflow-hidden">
                 <CardHeader>
-                  <CardTitle>Location</CardTitle>
+                  <CardTitle className="font-heading">Location</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   <div className="h-100">
                     <DynamicMapView
                       properties={[
@@ -262,8 +277,8 @@ export default async function PropertyPage({
           </div>
 
           {/* Sidebar - Agent Card */}
-          <div>
-            <div>
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
               {property.agent && (
                 <AgentCard agent={property.agent}>
                   <ContactAgentButton
