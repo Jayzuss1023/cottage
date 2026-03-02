@@ -40,7 +40,7 @@ export async function completeUserOnboarding(data: UserOnboardingData) {
     // Create new user document
     await client.create({
       _type: "user",
-      clerkId: "userId",
+      clerkId: userId,
       name: data.name,
       email: email,
       phone: data.phone,
@@ -145,6 +145,7 @@ export async function toggleSavedListing(
   propertyId: string,
 ): Promise<{ success: boolean; requiresOnboarding?: boolean }> {
   const { userId } = await auth();
+  console.log(userId);
 
   if (!userId) {
     throw new Error("Not authenticated");

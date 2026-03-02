@@ -65,7 +65,7 @@ export function MapView({
       maximumFractionDigits: 0,
     }).format(price);
   };
-  console.log(validProperties);
+
   return (
     <div className={className ?? "w-full h-full"}>
       <MapGL

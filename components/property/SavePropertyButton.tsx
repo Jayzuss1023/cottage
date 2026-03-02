@@ -43,6 +43,7 @@ export function SavePropertyButton({
     startTransition(async () => {
       try {
         const result = await toggleSavedListing(propertyId);
+        console.log(result);
         if (result.requiresOnboarding) {
           toast.info("Please complete your profile first");
           router.push("/onboarding");

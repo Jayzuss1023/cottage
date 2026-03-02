@@ -69,7 +69,6 @@ export default async function PropertyPage({
   });
 
   const property = (prop || {}) as Property;
-  console.log(property);
 
   if (!property) {
     notFound();

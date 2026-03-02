@@ -29,12 +29,12 @@ export interface SanityImage {
     metadata?: {
       lqip?: string;
       dimensions?: {
-        width: number;
+        width?: number;
         height: number;
       };
     };
   };
-  alt?: string;
+  alt?: string | null;
 }
 
 export interface Property {
@@ -53,12 +53,12 @@ export interface Property {
   lotSize: number;
   address: Address;
   image: SanityImage;
-  images: SanityImage[];
+  images?: SanityImage[];
   location: GeoPoint;
   amenities: Array<string>;
   openHouseDate: string;
   createdAt: string;
-  agent: Agent;
+  agent?: Agent;
 }
 
 export interface Agent {
@@ -91,12 +91,10 @@ export interface Lead {
 
 export interface User {
   _id: string;
-  clerkId: string;
-  name: string;
+  name?: string;
   email: string;
-  phone?: string;
-  photo?: SanityImage;
-  savedListings?: Property[];
+  phone: string;
+  photo: SanityImage;
   createdAt: string;
 }
 
