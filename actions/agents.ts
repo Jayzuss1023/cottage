@@ -50,7 +50,7 @@ export async function createAgentDocument() {
   const agent = await client.create({
     _type: "agent",
     userId,
-    name: `${user.firstName} || "" ${user.lastName} || ""`.trim() || "Agent",
+    name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Agent",
     email: user.emailAddresses[0]?.emailAddress || "",
     onboardingComplete: false,
     createdAt: new Date().toISOString(),
