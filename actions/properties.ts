@@ -153,3 +153,70 @@ export async function updateListing(
     })
     .commit();
 }
+
+export async function updateListingStatus(
+  listingId: string,
+  status: "active" | "pending" | "sold",
+) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Not authenticated");
+  }
+
+  const { data: agent } = await sanityFetch({
+    query: AGENT_BY_USER_ID_QUERY,
+    params: { userId },
+  });
+
+  if (!agent) {
+    throw new Error("Agent not found");
+  }
+
+  // Verify ownership
+  const { data: listing } = await sanityFetch({
+    query: PROPERTY_AGENT_REF_QUERY,
+    params: { id: listingId },
+  });
+
+  if (!listing || listing.agent?._ref !== agent._id) {
+    throw new Error("Unauthorized");
+  }
+
+  await client
+    .patch(listingId)
+    .set({
+      status,
+      updatedAt: new Date().toISOString(),
+    })
+    .commit();
+}
+
+export async function deleteListing(listingId: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Not authenticated");
+  }
+
+  const { data: agent } = await sanityFetch({
+    query: AGENT_BY_USER_ID_QUERY,
+    params: { userId },
+  });
+
+  if (!agent) {
+    throw new Error("Agent not found!");
+  }
+
+  // Verify ownership
+  const { data: listing } = await sanityFetch({
+    query: PROPERTY_AGENT_REF_QUERY,
+    params: { id: listingId },
+  });
+
+  if (!listing || listing.agent?._ref !== agent._id) {
+    throw new Error("Unauthorized");
+  }
+
+  await client.delete(listingId);
+}
