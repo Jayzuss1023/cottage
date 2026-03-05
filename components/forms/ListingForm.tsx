@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-// import { createListing, updateListing } from "@/actions/properties";
+import { createListing, updateListing } from "@/actions/properties";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { type AddressResult } from "./AddressAutocomplete";
-import { type ImageItem } from "./ImageUpload";
+import { type ImageItem, ImageUpload } from "./ImageUpload";
 // import { LocationPicker } from "./LocationPicker";
 
 const PROPERTY_TYPES = [
@@ -55,7 +55,7 @@ const formSchema = z.object({
   description: z.string().min(20, "Description must be at least 20 characters"),
   price: z.coerce.number().positive("Price must be positive"),
   propertyType: z.enum(["house", "apartment", "condo", "townhouse", "land"]),
-  status: z.enum(["active", "pending", "condo", "townhouse", "land"]),
+  status: z.enum(["active", "pending", "sold"]).optional(),
   bedrooms: z.coerce.number().min(0),
   bathrooms: z.coerce.number().min(0),
   squareFeet: z.coerce.number().min(0),
@@ -193,7 +193,7 @@ export function ListingForm({
   const onSubmit = (data: FormDataOutput) => {
     startTransition(async () => {
       try {
-        // Convert Images to Sanity format
+        // Convert images to Sanity format
         const imageRefs = images
           .filter((img) => !img.isUploading && img.assetRef)
           .map((img) => ({
@@ -209,6 +209,7 @@ export function ListingForm({
           title: data.title,
           description: data.description,
           price: data.price,
+          propertyType: data.propertyType,
           status: data.status,
           bedrooms: data.bedrooms,
           bathrooms: data.bathrooms,
@@ -237,4 +238,155 @@ export function ListingForm({
       }
     });
   };
+
+  // Watch for validation errors on address fields to show in autocomplete
+  const addressErrors = [
+    form.formState.errors.street,
+    form.formState.errors.city,
+    form.formState.errors.state,
+    form.formState.errors.zipCode,
+  ].filter(Boolean);
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Beautiful 3BR Home in Downtown"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe the property..."
+                      rows={5}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price ($)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="450000"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        value={String(field.value ?? "")}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="propertyType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Property Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {PROPERTY_TYPES.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {mode === "edit" && (
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {STATUS_OPTIONS.map((status) => (
+                          <SelectItem key={status.value} value={status.value}>
+                            {status.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Property Images</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ImageUpload
+              images={images}
+              onChange={setImages}
+              maxImages={10}
+              disabled={isPending}
+            />
+          </CardContent>
+        </Card>
+      </form>
+    </Form>
+  );
 }

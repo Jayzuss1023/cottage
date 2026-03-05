@@ -5,19 +5,16 @@ import { redirect } from "next/navigation";
 import { client } from "@/sanity/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
-  AGENT_BY_USER_ID_QUERY,
   AGENT_ID_BY_USER_QUERY,
   PROPERTY_AGENT_REF_QUERY,
 } from "@/sanity/lib/queries/queries";
-import { Geopoint } from "@/sanity.types";
-import { ListingFormData } from "@/types";
 
 interface ImageReference {
   _type: "image";
-  _key: "string";
+  _key: string;
   asset: {
     _type: "reference";
-    _ref: "string";
+    _ref: string;
   };
 }
 
@@ -66,7 +63,7 @@ export async function createListing(data: ListingFormDataWithImages) {
   }
 
   const { data: agent } = await sanityFetch({
-    query: AGENT_BY_USER_ID_QUERY,
+    query: AGENT_ID_BY_USER_QUERY,
     params: { userId },
   });
 
@@ -112,7 +109,7 @@ export async function updateListing(
   }
 
   const { data: agent } = await sanityFetch({
-    query: AGENT_BY_USER_ID_QUERY,
+    query: AGENT_ID_BY_USER_QUERY,
     params: { userId },
   });
 
@@ -165,7 +162,7 @@ export async function updateListingStatus(
   }
 
   const { data: agent } = await sanityFetch({
-    query: AGENT_BY_USER_ID_QUERY,
+    query: AGENT_ID_BY_USER_QUERY,
     params: { userId },
   });
 
@@ -200,7 +197,7 @@ export async function deleteListing(listingId: string) {
   }
 
   const { data: agent } = await sanityFetch({
-    query: AGENT_BY_USER_ID_QUERY,
+    query: AGENT_ID_BY_USER_QUERY,
     params: { userId },
   });
 

@@ -1,4 +1,4 @@
-// import { ListingForm } from "@/components/forms/ListingForm";
+import { ListingForm } from "@/components/forms/ListingForm";
 import { sanityFetch } from "@/sanity/lib/live";
 import { AMENITIES_QUERY } from "@/sanity/lib/queries/queries";
 
@@ -14,7 +14,7 @@ export default async function NewListingPage() {
         <p>Add a new property to your listings</p>
       </div>
 
-      <ListingForm amentities={amenities} />
+      <ListingForm amenities={amenities} />
     </div>
   );
 }
