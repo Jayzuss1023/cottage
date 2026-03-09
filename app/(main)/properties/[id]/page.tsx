@@ -22,7 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatBadge } from "@/components/ui/stat-badge";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PROPERTY_DETAIL_QUERY } from "@/sanity/lib/queries/queries";
-import { Property } from "@/types";
+import type { Property } from "@/types";
 
 export async function generateMetadata({
   params,

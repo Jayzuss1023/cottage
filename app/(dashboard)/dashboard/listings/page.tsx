@@ -3,7 +3,7 @@ import { MoreHorizontal, Pencil, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { DeleteListingButton } from "@/components/dashboard/DeleteListingButton";
-import { ListingStatusSelect } from "@/components/dashboard/ListingStatusSelect";
+import { ListingStatusSelect } from "@/components/dashboard/ListingStatusSelected";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,10 +26,8 @@ import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
   AGENT_BY_USER_ID_QUERY,
-  AGENT_ID_BY_USER_QUERY,
   AGENT_LISTINGS_QUERY,
 } from "@/sanity/lib/queries/queries";
-import type { Property } from "@/types";
 
 export default async function ListingsPage() {
   const { userId } = await auth();
@@ -113,7 +111,7 @@ export default async function ListingsPage() {
                     </div>
                     <div>
                       <Link
-                        href={`properties/${listing._id}`}
+                        href={`/properties/${listing._id}`}
                         className="font-medium hover:underline"
                       >
                         ${listing.title}

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Amenity } from "@/types";
+import type { AMENITIES_QUERYResult } from "@/sanity.types";
 
 const PROPERTY_TYPES = [
   { value: "all", label: "All Types" },
@@ -59,7 +59,7 @@ const DAYS_ON_MARKET_OPTIONS = [
 ];
 
 interface FilterSidebarProps {
-  amenities: Amenity[];
+  amenities: AMENITIES_QUERYResult;
 }
 
 export function FilterSidebar({ amenities }: FilterSidebarProps) {

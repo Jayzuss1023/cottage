@@ -27,13 +27,13 @@ const navItems = [
     description: "Manage your properties",
   },
   {
-    href: "dashboard/listings/new",
+    href: "/dashboard/listings/new",
     label: "Add Listing",
     icon: ListPlus,
     description: "Create new listing",
   },
   {
-    href: "dashboard/leads",
+    href: "/dashboard/leads",
     label: "Lead Inbox",
     icon: MessageSquare,
     description: "Buyer inquiries",

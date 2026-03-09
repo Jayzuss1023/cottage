@@ -20,7 +20,7 @@ import {
   PROPERTIES_COUNT_QUERY,
   PROPERTIES_SEARCH_QUERY,
 } from "@/sanity/lib/queries/queries";
-import { Property } from "@/types";
+import type { Property } from "@/types";
 
 export const metadata: Metadata = {
   title: "Browse Properties",
@@ -160,7 +160,7 @@ export default async function PropertiesPage({
               <Suspense
                 fallback={<Skeleton className="h-125 w-full rounded-2xl" />}
               >
-                <FilterSidebar amenities={amenities || []} />
+                <FilterSidebar amenities={amenities} />
               </Suspense>
             </div>
           </aside>

@@ -1,9 +1,9 @@
-import { type SchemaTypeDefinition } from "sanity";
-import { user } from "./user";
-import { property } from "./property";
+import type { SchemaTypeDefinition } from "sanity";
 import { agent } from "./agent";
 import { amenity } from "./amenity";
 import { lead } from "./lead";
+import { property } from "./property";
+import { user } from "./user";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [user, property, agent, amenity, lead],

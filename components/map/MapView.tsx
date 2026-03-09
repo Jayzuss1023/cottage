@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import MapGL, { Marker, NavigationControl, Popup } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Property } from "@/types";
+import type { Property } from "@/types";
 
 interface MapViewProps {
   properties: Property[];

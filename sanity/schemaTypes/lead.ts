@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const lead = defineType({
   name: "lead",
@@ -20,8 +20,8 @@ export const lead = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "buyer",
-      title: "Buyer",
+      name: "buyerName",
+      title: "Buyer Name",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),

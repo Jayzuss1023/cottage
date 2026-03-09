@@ -10,8 +10,8 @@ import { GripVertical, ImagePlus, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { uploadImageToSanity } from "@/sanity/lib/upload";
 import { cn } from "@/lib/utils";
+import { uploadImageToSanity } from "@/sanity/lib/upload";
 
 export interface ImageItem {
   id: string;

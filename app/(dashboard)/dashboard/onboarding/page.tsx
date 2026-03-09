@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { AGENT_ONBOARDING_CHECK_QUERY } from "@//sanity/lib/queries/queries";
 import { createAgentDocument } from "@/actions/agents";
 import { AgentOnboardingForm } from "@/components/forms/AgentOnboardingForm";
 import { sanityFetch } from "@/sanity/lib/live";
-import { AGENT_ONBOARDING_CHECK_QUERY } from "@//sanity/lib/queries/queries";
 
 export default async function AgentOnboardingPage() {
   // Middleware guarantees: User is authenticated + has agent plan

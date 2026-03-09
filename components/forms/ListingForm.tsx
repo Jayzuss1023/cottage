@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { type AddressResult, AddressAutocomplete } from "./AddressAutocomplete";
+import { AddressAutocomplete, type AddressResult } from "./AddressAutocomplete";
 import { type ImageItem, ImageUpload } from "./ImageUpload";
 import { LocationPicker } from "./LocationPicker";
 

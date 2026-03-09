@@ -1,7 +1,7 @@
 import { ListingForm } from "@/components/forms/ListingForm";
-import { Amenity } from "@/types/index";
 import { sanityFetch } from "@/sanity/lib/live";
 import { AMENITIES_QUERY } from "@/sanity/lib/queries/queries";
+import type { Amenity } from "@/types/index";
 
 export default async function NewListingPage() {
   const { data: amenities } = await sanityFetch({

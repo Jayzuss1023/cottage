@@ -113,7 +113,7 @@ export async function createLead(
 
 export async function updateLeadStatus(
   leadId: string,
-  status: "new" | "contacted" | "sold",
+  status: "new" | "contacted" | "closed",
 ) {
   const { userId } = await auth();
 
