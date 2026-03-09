@@ -3,9 +3,9 @@ import { SanityImageDimensions } from "@/sanity.types";
 // Amenity type
 export interface Amenity {
   _id: string;
-  value: string | null;
-  label: string | null;
-  icon?: string | null;
+  value: string;
+  label: string;
+  icon?: string;
   order?: number;
 }
 
@@ -92,10 +92,10 @@ export interface Lead {
 export interface User {
   _id: string;
   name?: string;
-  email: string;
-  phone: string;
-  photo: SanityImage;
-  createdAt: string;
+  email?: string;
+  phone?: string;
+  photo?: SanityImage;
+  createdA?: string;
 }
 
 // Form data types

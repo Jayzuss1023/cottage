@@ -28,9 +28,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { type AddressResult } from "./AddressAutocomplete";
+import { type AddressResult, AddressAutocomplete } from "./AddressAutocomplete";
 import { type ImageItem, ImageUpload } from "./ImageUpload";
-// import { LocationPicker } from "./LocationPicker";
+import { LocationPicker } from "./LocationPicker";
 
 const PROPERTY_TYPES = [
   { value: "house", label: "House" },
@@ -386,6 +386,210 @@ export function ListingForm({
             />
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Property Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <FormField
+                control={form.control}
+                name="bedrooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bedrooms</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        value={String(field.value ?? "")}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="bathrooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bathrooms</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        value={String(field.value ?? "")}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="squareFeet"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Square Feet</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        value={String(field.value ?? "")}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="yearBuilt"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Year Built</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="2020"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        value={String(field.value ?? "")}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Amenities</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="amenities"
+              render={({ field }) => (
+                <FormItem>
+                  {amenities.length < 0 ? (
+                    <div>
+                      {amenities.map((amenity) => (
+                        <div key={amenity._id}>
+                          <Checkbox
+                            id={amenity.value}
+                            checked={field.value?.includes(amenity.value)}
+                            onCheckedChange={(checked: boolean) => {
+                              const currentValue = field.value || [];
+                              if (checked) {
+                                field.onChange([
+                                  ...currentValue,
+                                  amenity.value,
+                                ]);
+                              } else {
+                                field.onChange(
+                                  currentValue.filter(
+                                    (v) => v !== amenity.value,
+                                  ),
+                                );
+                              }
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No amenities available. Add amenities in Sanity Studio.
+                    </p>
+                  )}
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Property Address</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Address Autocomplete -= single input that replaced separate fields */}
+            <div className="space-y-2">
+              <Label>Search Address</Label>
+              <AddressAutocomplete
+                value={addressDisplayValue}
+                onChange={handleAddressSelect}
+                placeholder="Start typing an address (e.g., 123 Main St, San Francisco"
+                disabled={isPending}
+              />
+              {addressErrors.length > 0 && !form.getValues("street") && (
+                <p className="text-sm ext-destructive">
+                  Please select an address from the suggestions
+                </p>
+              )}
+            </div>
+
+            {/* Hidden form fields - these store the actualy values for submission  */}
+            <input type="hidden" {...form.register("street")} />
+            <input type="hidden" {...form.register("city")} />
+            <input type="hidden" {...form.register("state")} />
+            <input type="hidden" {...form.register("zipCode")} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Location on Map</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              The map updates automatically when you select an address. You can
+              also click to fine-tune the exact location
+            </p>
+          </CardHeader>
+          <CardContent>
+            <LocationPicker
+              value={location}
+              onChange={handleLocationChange}
+              disabled={isPending}
+            />
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end gap-4">
+          <Button type="button" variant="outline" asChild>
+            <a href="/dashboard/listings">Cancel</a>
+          </Button>
+          <LoadingButton
+            type="submit"
+            loading={isPending}
+            loadingText="Saving..."
+          >
+            {mode === "edit" ? "Update Listing" : "Create Listing"}
+          </LoadingButton>
+        </div>
       </form>
     </Form>
   );

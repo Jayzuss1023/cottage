@@ -2,8 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { MoreHorizontal, Pencil, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-// import { DeleteListingButton } from "@/components/dashboard/DeleteListingButton";
-// import { ListingStatusSelect } from "@/components/dashboard/ListingStatusSelect";
+import { DeleteListingButton } from "@/components/dashboard/DeleteListingButton";
+import { ListingStatusSelect } from "@/components/dashboard/ListingStatusSelect";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,12 +46,14 @@ export default async function ListingsPage() {
     params: { agentId: agent._id },
   });
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(price);
+  const formatPrice = (price: number | null) => {
+    if (price) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+    }
   };
 
   const formatDate = (date: string) => {
@@ -90,6 +92,83 @@ export default async function ListingsPage() {
                 <TableHead className="w-17.5" />
               </TableRow>
             </TableHeader>
+            <TableBody>
+              {listings.map((listing) => (
+                <TableRow key={listing._id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      {listing.image?.asset ? (
+                        <Image
+                          src={urlFor(listing.image).width(80).height(60).url()}
+                          alt={listing.title || "Property for sale"}
+                          width={80}
+                          height={60}
+                          className="rounded object-cover"
+                        />
+                      ) : (
+                        <div className="w-20 h-15 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <Link
+                        href={`properties/${listing._id}`}
+                        className="font-medium hover:underline"
+                      >
+                        ${listing.title}
+                      </Link>
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="font-semibold">
+                    {formatPrice(listing.price)}
+                  </TableCell>
+                  <TableCell>
+                    <ListingStatusSelect
+                      listingId={listing._id}
+                      currentStatus={
+                        listing.status ? listing.status : "pending"
+                      }
+                    />
+                  </TableCell>
+
+                  <TableCell className="text-muted-foreground">
+                    {listing.bedrooms} beds • {listing.bathrooms} baths
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {formatDate(
+                      listing.createdAt
+                        ? listing.createdAt
+                        : Date.now().toLocaleString(),
+                    )}
+                  </TableCell>
+
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/listings/${listing._id}`}>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/properties/${listing._id}`}>View</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DeleteListingButton listingId={listing._id} />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </div>
       ) : (
