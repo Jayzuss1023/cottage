@@ -31,7 +31,11 @@ export default async function DashboardPage() {
     query: AGENT_DASHBOARD_QUERY,
     params: { userId },
   });
-  if (!agent) return;
+
+  if (!agent) {
+    throw new Error("Agent not found");
+  }
+
   // Get stats
   const [
     { data: listingsCount },

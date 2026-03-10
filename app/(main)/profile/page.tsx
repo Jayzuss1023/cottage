@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { sanityFetch } from "@/sanity/lib/live";
 import { USER_PROFILE_QUERY } from "@/sanity/lib/queries/queries";
-import type { User } from "@/types";
 
 export default async function ProfilePage() {
   const { userId } = await auth();
@@ -34,7 +33,7 @@ export default async function ProfilePage() {
             <CardTitle>Profile Information</CardTitle>
           </CardHeader>
           <CardContent>
-            <ProfileForm user={(user || {}) as User} />
+            <ProfileForm user={user} />
           </CardContent>
         </Card>
 

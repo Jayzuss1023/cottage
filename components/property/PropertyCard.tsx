@@ -50,7 +50,7 @@ export function PropertyCard({
           {property.image?.asset ? (
             <Image
               src={urlFor(property.image).width(600).height(450).url()}
-              alt={property.title}
+              alt={property.title || ""}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -112,7 +112,7 @@ export function PropertyCard({
           {/* Price */}
           <div className="flex items-start justify-between gap-2 mb-2">
             <h3 className="font-bold font-heading text-xl tabular-nums">
-              {formatPrice(property.price)}
+              {formatPrice(property.price || 0)}
             </h3>
             {/* Title */}
             <p className="text-sm text-muted-foreground line-clamp-1 mb-4 min-w-0">

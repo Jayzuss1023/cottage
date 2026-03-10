@@ -37,7 +37,9 @@ export default async function ListingsPage() {
     params: { userId },
   });
 
-  if (!agent) return;
+  if (!agent) {
+    throw new Error("Agent not found");
+  }
 
   const { data: listings } = await sanityFetch({
     query: AGENT_LISTINGS_QUERY,

@@ -170,7 +170,7 @@ export const property = defineType({
       title: "Original Price",
       type: "number",
       description: "Original listing price (if reduced)",
-      validation: (Rule) => Rule.positive(),
+      validation: (Rule) => Rule.required().positive(),
     }),
     defineField({
       name: "featured",

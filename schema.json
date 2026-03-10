@@ -94,7 +94,7 @@
         },
         "optional": true
       },
-      "buyer": {
+      "buyerName": {
         "type": "objectAttribute",
         "value": {
           "type": "string"

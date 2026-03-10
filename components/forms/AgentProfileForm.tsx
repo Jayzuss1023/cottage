@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
-import { AGENT_PROFILE_QUERYResult } from "@/sanity.types";
+import type { AGENT_PROFILE_QUERYResult } from "@/sanity.types";
 
 const formSchema = z.object({
   bio: z.string().min(50, "Bio must be at least 50 characters"),

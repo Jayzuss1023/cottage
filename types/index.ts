@@ -1,5 +1,3 @@
-import { SanityImageDimensions } from "@/sanity.types";
-
 // Amenity type
 export interface Amenity {
   _id: string;
@@ -11,53 +9,54 @@ export interface Amenity {
 
 // Property types
 export interface Address {
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
 }
 
 export interface GeoPoint {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
 }
 
 export interface SanityImage {
   asset: {
     _id: string;
-    url: string;
-    metadata?: {
-      lqip?: string;
-      dimensions?: {
-        width?: number;
-        height: number;
-      };
-    };
-  };
+    url: string | null;
+    metadata: {
+      lqip: string | null;
+      dimensions: {
+        width?: number | null;
+        height?: number | null;
+        aspectRatio?: number | null;
+      } | null;
+    } | null;
+  } | null;
   alt?: string | null;
 }
 
 export interface Property {
   _id: string;
-  title: string;
-  description?: string;
-  slug: string;
-  price: number;
-  originalPrice: number;
-  bedrooms: number;
-  bathrooms: number;
-  propertyType?: string;
-  status?: string;
-  squareFeet: number;
-  yearBuilt: number;
-  lotSize: number;
-  address: Address;
-  image: SanityImage;
-  images?: SanityImage[];
-  location: GeoPoint;
-  amenities: Array<string>;
-  openHouseDate: string;
-  createdAt: string;
+  title: string | null;
+  description?: string | null;
+  slug: string | null;
+  price: number | null;
+  originalPrice?: number | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  propertyType?: string | null;
+  status?: string | null;
+  squareFeet: number | null;
+  yearBuilt?: number | null;
+  lotSize?: number | null;
+  address: Address | null;
+  image: SanityImage | null;
+  images?: SanityImage[] | null;
+  location: GeoPoint | null;
+  amenities?: Array<string>;
+  openHouseDate?: string;
+  createdAt?: string;
   agent?: Agent;
 }
 
